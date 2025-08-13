@@ -1,0 +1,40 @@
+name: preview-and-screenshots
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install
+        run: npm ci
+      - name: Build
+        run: npm run build --if-present
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+      - name: Ensure screenshots dir exists
+        run: mkdir -p screens
+      - name: Start preview server
+        run: |
+          (npm run preview -- --host 127.0.0.1 --port 4174 &)
+          for i in {1..30}; do
+            if curl -sSf http://127.0.0.1:4174 > /dev/null; then echo up; break; fi
+            sleep 1
+          done
+      - name: Run screenshot script
+        env:
+          VITE_PREVIEW_URL: http://127.0.0.1:4174
+        run: node playwright-screenshots.mjs || true
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: screens
+
+

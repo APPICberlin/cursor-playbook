@@ -1,0 +1,32 @@
+---
+description: >
+  process for integrating external APIs and services.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Integration Guidelines
+
+1. **Evaluation**
+   - Review vendor documentation and licensing before integration.
+   - Assess reliability, SLAs, and security implications.
+
+2. **Implementation**
+   - Use a dedicated integration layer/module.
+   - Keep third-party code isolated from core business logic.
+
+3. **Security**
+   - Authenticate securely (OAuth2, API keys from vaults).
+   - Validate and sanitize all incoming data.
+
+4. **Resilience**
+   - Implement retries with exponential backoff.
+   - Handle and log all API errors gracefully.
+
+5. **Monitoring**
+   - Track API usage and error rates.
+   - Set alerts for performance degradation or quota limits.
+
+6. **Documentation**
+   - Maintain integration docs in `/docs/integrations`.

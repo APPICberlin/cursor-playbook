@@ -1,0 +1,7 @@
+node_modules/
+playwright-report/
+test-results/
+screens/debug-*
+.DS_Store
+
+

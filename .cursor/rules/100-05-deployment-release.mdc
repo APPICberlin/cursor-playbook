@@ -1,0 +1,31 @@
+---
+description: >
+  Deployment & Release – ensures safe, consistent, and approved deployments to staging and production.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Deployment & Release – Standards
+
+1. **Pre-Deployment Checks**
+   - All tickets in the release must meet Definition of Done (DoD).
+   - CI pipeline: all checks (lint, tests, build) must pass.
+   - No unresolved critical bugs or regressions.
+
+2. **Approval**
+   - Production deployments require explicit approval from PM or designated release owner.
+   - Staging deployments can be initiated by any contributor with write access.
+
+3. **Deployment Process**
+   - Use approved deployment pipeline; no manual production deploys unless approved.
+   - Tag release in version control: `v<major>.<minor>.<patch>`.
+
+4. **Post-Deployment Validation**
+   - Verify main application flows in target environment.
+   - Run smoke tests and critical path checks.
+   - Document deployment outcome in `/docs/DEPLOY_LOG.md`.
+
+5. **Rollback Plan**
+   - Maintain rollback instructions for the current release.
+   - Ensure prior stable version is available for immediate restore.

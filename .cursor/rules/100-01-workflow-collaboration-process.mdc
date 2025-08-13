@@ -1,0 +1,65 @@
+---
+description: >
+  Workflow — defines the end-to-end process for tickets, branches,
+  collaboration, and delivery. Applies to all contributors.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# 100-01 — Workflow (Collaboration & Process)
+
+## 1) Ticket Lifecycle
+- **Source of Truth:** All work starts with a ticket in the tracker.
+- Ticket must contain:
+  - **Problem**: clear and concise
+  - **Scope**: boundaries and non-goals
+  - **Acceptance Criteria**
+  - Use the scaffold in `docs/TICKETS.md` for all tickets.
+- Ticket status:
+  1. **Backlog** → triaged and prioritised
+  2. **Ready** → meets Definition of Ready (DoR)
+  3. **In Progress** → branch created, active work ongoing
+  4. **In Review** → PR open, ready for review
+  5. **Done** → merged & deployed, meets Definition of Done (DoD)
+
+## 2) Branching & Naming
+- Branch from `main` unless specified.
+- Naming:  
+  `feat/<ticket-id>-<slug>` for features  
+  `fix/<ticket-id>-<slug>` for fixes
+- Keep branches short-lived; merge after review & green CI.
+
+## 3) Pull Request Standards
+- PR must:
+  - Reference the ticket ID in title and description.
+  - Summarise **What** changed and **Why**.
+  - List any **known limitations** or follow-up items.
+- Keep PR size small (aim < 400 LOC). Larger PRs must be split unless approved by PM.
+- Use the PR template at `.github/pull_request_template.md` and complete the checklist.
+ - Embed screenshots inline in the PR body (paste PNGs under the Screenshots section). CI also provides a `screenshots` artifact; include representative images inline.
+ - Set labels (EPIC:*, Batch) and assign the current Batch milestone before moving PR from Draft to Ready.
+
+## 4) Collaboration
+- Use comments in PR for clarifications; resolve before merge.
+- No direct commits to `main` except hotfixes approved by PM.
+- If blocked, update ticket immediately and request PM decision.
+
+## 5) Review Process
+- At least 1 reviewer must approve before merge.
+- Reviewer checks:
+  - Meets acceptance criteria
+  - Passes QA Loop
+  - No security, performance, or accessibility regressions
+- Author fixes review comments before merge.
+
+## 6) Merge & Deployment
+- Squash merge with conventional commit message.
+- CI must be green (lint, tests, build).
+- Deploy via pipeline; no manual deploys to production unless approved.
+
+## 7) Post-Merge
+- Close ticket with final note on:
+  - Key changes
+  - Any deviations from scope
+  - Learnings to add to `docs/LEARNING_LOG.md`

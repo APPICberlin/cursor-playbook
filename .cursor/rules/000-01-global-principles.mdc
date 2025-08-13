@@ -1,0 +1,36 @@
+---
+description: >
+  Global Principles — baseline, project-wide rules that govern every task,
+  PR, and agent action. Highest precedence; all other rules inherit from this.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# 000-01 — Global Principles
+
+## 1) Purpose & Precedence
+- This rule defines non-negotiable, project-wide principles.
+- **Precedence:** If any other rule conflicts, **this rule wins**.
+- **Scope:** Applies to humans and Cursor Agents (Ask/Agent/Background).
+
+## 2) Read-Before-Work (Docs-First)
+Before editing code, the assignee must read and, if missing, create/update:
+- `docs/README.md` (run/build/test)
+- `docs/ARCHITECTURE.md` (modules, boundaries, data flow)
+- `docs/UI_GUIDELINES.md` (tokens, components, patterns)
+- Relevant ADRs under `docs/DECISIONS/`
+- The ticket’s Acceptance Criteria (DoR/DoD)
+
+If required docs are missing, **write them first** (stub allowed), then proceed.
+
+## 3) Planning & Tickets
+- Work only from a ticket with a clear **Problem**, **Scope**, and **Acceptance Criteria**.
+- Keep diffs **minimal** and scoped to the ticket.
+- Branch naming: `feat/<id>-<slug>` or `fix/<id>-<slug>`. Conventional Commits. Squash on merge.
+
+## 4) Working Mode & Safety
+- Start in **Ask** mode to confirm scope; switch to **Agent** only after a short plan is produced.
+- **Checkpointing:** After each major edit, run lint/tests; summarize progress in the PR.
+- **Failure guard:** After **2 failed attempts** (tests/CI), **stop**, open PR with findings, and request review.
+- Do not churn unrelated files. No speculative refactors w

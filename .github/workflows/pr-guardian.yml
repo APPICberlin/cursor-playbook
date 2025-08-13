@@ -1,0 +1,99 @@
+name: pr-guardian
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited, ready_for_review]
+
+jobs:
+  guard:
+    if: ${{ github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate PR metadata and screenshot hygiene
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const title = pr.title || '';
+            const body  = pr.body || '';
+
+            const requiredTitle = /^(feat|fix|chore)\/\w+-\w+\s+—\s+.+/; // e.g., feat/T-123— short title
+            if (!requiredTitle.test(title)) {
+              core.setFailed('PR title must start with type/ticket — short title (e.g., feat/T-123 — Update table).');
+            }
+
+            // Collect changed files
+            const files = await github.paginate(github.rest.pulls.listFiles, { ...context.repo, pull_number: pr.number });
+            const screenChanges = files.filter(f => /^screens\//.test(f.filename));
+
+            // Reject debug images
+            const debugImages = screenChanges.filter(f => /\bdebug-.*\.(png|jpg|jpeg)$/i.test(f.filename));
+            if (debugImages.length) {
+              core.setFailed(`Remove debug screenshots: ${debugImages.map(f=>f.filename).join(', ')}`);
+            }
+
+            // If screens/ changed, require at least one TICKET_ID-* image referenced in PR body
+            if (screenChanges.length) {
+              const referenced = (body.match(/screens\/[A-Za-z0-9_-]+\.(png|jpg|jpeg)/g) || []).map(x=>x.trim());
+              const ticketLike = screenChanges.some(f => /\b[A-Z]+-\d+-.+\.(png|jpg|jpeg)$/i.test(f.filename));
+              if (!ticketLike || referenced.length === 0) {
+                core.setFailed('If modifying screens/, include at least one TICKET_ID-*.png and reference it inline in the PR body.');
+              }
+            }
+
+            // Lightweight error-boundary heuristic: flag common German text or button label
+            const crypto = require('node:crypto');
+            const fs = require('node:fs');
+            for (const f of screenChanges) {
+              if (!/\.(png)$/i.test(f.filename)) continue;
+              const data = fs.readFileSync(f.filename);
+              const textMatch = /Ein Fehler ist aufgetreten|Neu laden/i.test(data.toString('latin1'));
+              if (textMatch) {
+                core.setFailed(`Screenshot appears to show error boundary: ${f.filename}. Replace with a passing-state screenshot.`);
+              }
+            }
+
+            core.info('PR guardian checks passed.');
+
+name: pr-guardian
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, ready_for_review, labeled]
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate PR title has ticket id
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$TITLE" =~ ^[A-Z0-9]+-[0-9]+\  ]]; then
+            echo "Title must start with <ID> — e.g., E2-14 — Short title"
+            exit 1
+          fi
+      - name: Enforce Batch WIP limit (<=2)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          batch_label=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json labels -q '.labels[].name | select(startswith("Batch"))' | head -n1)
+          if [[ -n "$batch_label" ]]; then
+            count=$(gh pr list --repo "$REPO" --state open --label "$batch_label" --json number -q 'length')
+            if (( count > 2 )); then
+              echo "WIP limit exceeded for $batch_label (open PRs: $count). Limit is 2."
+              exit 1
+            fi
+          else
+            echo "No Batch label found; add one to pass this check."
+            exit 1
+          fi
+
+

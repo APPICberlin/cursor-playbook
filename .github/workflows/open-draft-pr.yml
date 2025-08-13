@@ -1,0 +1,57 @@
+name: open-draft-pr
+
+on:
+  push:
+    branches:
+      - 'feat/**'
+      - 'fix/**'
+  workflow_dispatch:
+    inputs:
+      head:
+        description: Branch name (defaults to current)
+        required: false
+      base:
+        description: Base branch
+        required: false
+        default: main
+
+jobs:
+  open:
+    if: startsWith(github.ref, 'refs/heads/feat/') || startsWith(github.ref, 'refs/heads/fix/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Open or update Draft PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.event.inputs.head || github.ref_name }}
+          BASE: ${{ github.event.inputs.base || 'main' }}
+        run: |
+          set -euo pipefail
+          if gh pr list --head "$BRANCH" --base "$BASE" --state open --json number -q 'length>0' >/dev/null; then
+            echo "PR already exists for $BRANCH"
+            exit 0
+          fi
+
+          TITLE="$BRANCH"
+          BODY="Auto-opened draft PR for $BRANCH"
+          DRAFT=true
+          if [ -f tmp/pr_payload.json ]; then
+            TITLE=$(jq -r '.title // empty' tmp/pr_payload.json || echo "$TITLE")
+            BODY=$(jq -r '.body // empty' tmp/pr_payload.json || echo "$BODY")
+            flag=$(jq -r '.draft // "true"' tmp/pr_payload.json || echo "true")
+            if [ "$flag" = "false" ]; then DRAFT=false; fi
+          fi
+
+          if [ "$DRAFT" = true ]; then
+            gh pr create --base "$BASE" --head "$BRANCH" --title "$TITLE" --body "$BODY" --draft
+          else
+            gh pr create --base "$BASE" --head "$BRANCH" --title "$TITLE" --body "$BODY"
+          fi
+
+

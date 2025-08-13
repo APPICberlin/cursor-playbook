@@ -1,0 +1,28 @@
+---
+description: >
+  Post-Merge – required actions immediately after merging to maintain code quality, documentation, and knowledge continuity.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Post-Merge – Required Follow-Up Steps
+
+1. **Close Ticket**
+   - Mark the related ticket as closed in the tracker.
+   - Include a final comment summarizing:
+     - Key changes delivered.
+     - Deviations from original scope.
+     - Known limitations.
+
+2. **Documentation Update**
+   - Add new learnings or patterns to `/docs/LEARNING_LOG.md`.
+   - Update any relevant `/docs` references impacted by the change.
+
+3. **Knowledge Sharing**
+   - If change impacts team workflows, post a brief summary in the team channel.
+   - Highlight any risks or special deployment considerations.
+
+4. **Cleanup**
+   - Delete merged branches unless explicitly kept for reference.
+   - Remove temporary debug or test assets not needed long-term.

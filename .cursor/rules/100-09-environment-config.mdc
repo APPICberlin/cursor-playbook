@@ -1,0 +1,29 @@
+---
+description: >
+  rules for environment configuration and secrets management.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Environment & Configuration Standards
+
+1. **Separation of Environments**
+   - Maintain strict isolation between dev, staging, and production.
+   - No direct DB or service connections between environments.
+
+2. **Configuration Management**
+   - All environment variables in `.env` or equivalent, never hard-coded.
+   - Provide `.env.example` with required keys and safe defaults.
+
+3. **Secrets**
+   - Store all secrets in secure vaults (e.g., Azure Key Vault).
+   - Rotate credentials according to security policy.
+   - Never commit secrets to version control.
+
+4. **Access**
+   - Grant least privilege required for each environment.
+   - Require approval for production environment changes.
+
+5. **Auditing**
+   - Log all configuration changes in `docs/CONFIG_CHANGE_LOG.md`.

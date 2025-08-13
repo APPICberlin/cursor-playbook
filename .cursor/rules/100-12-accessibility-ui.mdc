@@ -1,0 +1,29 @@
+---
+description: >
+  guidelines for accessibility and inclusive UI design.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Accessibility & UI Standards
+
+1. **WCAG Compliance**
+   - Meet WCAG 2.1 AA requirements for all public-facing features.
+   - Ensure sufficient color contrast and scalable fonts.
+
+2. **Keyboard Navigation**
+   - All interactive elements must be reachable and usable via keyboard.
+   - Focus states must be clearly visible.
+
+3. **ARIA & Semantics**
+   - Use semantic HTML.
+   - Apply ARIA roles and labels where needed.
+
+4. **Forms**
+   - Provide labels for all form inputs.
+   - Show clear validation messages and instructions.
+
+5. **Testing**
+   - Run automated accessibility checks (axe-core, Lighthouse).
+   - Include accessibility review in QA Loop.

@@ -1,0 +1,34 @@
+---
+description: >
+  QA Loop – mandatory review, testing, and documentation before any merge or deployment.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# QA Loop – Mandatory Steps for Every Change
+
+1. **Pre-Implementation**
+   - Read relevant docs in `/docs` and the current task description in `TODO.md`.
+   - Clarify unclear requirements before coding.
+
+2. **Implementation**
+   - Follow SCOUT coding standards and naming conventions.
+   - Keep code modular, reusable, and well-commented.
+
+3. **Self-Review**
+   - Compare changes against acceptance criteria.
+   - Check for security issues, performance impact, and potential regressions.
+
+4. **Testing**
+   - Write or update unit/integration tests.
+   - Run full test suite locally and ensure all pass.
+   - Perform manual testing on all affected flows.
+
+5. **Documentation**
+   - Update `/docs` and `CHANGELOG.md` if relevant.
+   - Log important decisions in `/docs/decisions.md`.
+
+6. **Handoff**
+   - Summarize changes, tests performed, and any known limitations.
+   - Only then request merge/release.

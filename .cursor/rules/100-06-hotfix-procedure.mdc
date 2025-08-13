@@ -1,0 +1,39 @@
+---
+description: >
+  Hotfix Procedure — process for urgent fixes in production or staging to restore functionality or security.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Hotfix Procedure — Urgent Fixes
+
+1. **Definition**
+   - A **hotfix** is a critical change required to restore production or staging functionality, fix a major security vulnerability, or resolve a blocking bug.
+   - Hotfixes bypass normal sprint cycles but still follow QA and documentation requirements.
+
+2. **Trigger & Approval**
+   - Triggered by detection of a critical incident.
+   - Requires PM or designated release owner approval before starting.
+
+3. **Branching**
+   - Branch from the relevant release tag or `main` if no tag exists.
+   - Name: `hotfix/<ticket-id>-<short-description>`.
+
+4. **Implementation**
+   - Limit scope strictly to the urgent issue.
+   - Avoid unrelated changes or refactors.
+   - Maintain SCOUT coding standards.
+
+5. **QA Loop**
+   - Write or update relevant tests for the fix.
+   - Perform manual testing on affected flows.
+   - Ensure CI passes before deployment.
+
+6. **Deployment**
+   - Deploy directly to production after validation and approval.
+   - Tag as `v<major>.<minor>.<patch>-hotfix`.
+
+7. **Post-Hotfix**
+   - Document the issue, resolution, and lessons learned in `/docs/LEARNING_LOG.md`.
+   - Merge hotfix branch back into `main` and other active branches to avoid regression.

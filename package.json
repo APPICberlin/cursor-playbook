@@ -1,0 +1,22 @@
+{
+  "name": "cursor-playbook",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "echo 'noop build'",
+    "test": "npm run unit && npm run smoke",
+    "unit": "vitest run --silent --reporter=dot",
+    "smoke": "playwright test tests/e2e/smoke.spec.ts --project=chromium",
+    "prepush": "npm run lint && npm run typecheck && npm run build && npm run smoke"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.46.0",
+    "eslint": "^9.6.0",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  }
+}
+
+

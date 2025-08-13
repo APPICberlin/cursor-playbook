@@ -1,0 +1,46 @@
+---
+description: >
+  Security Standards — mandatory security practices for all code, infrastructure, and data handling.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Security Standards — Mandatory Practices
+
+1. **Data Handling**
+   - Store sensitive data securely using encryption at rest and in transit.
+   - Never hardcode credentials, tokens, or API keys.
+   - Use environment variables and secret managers.
+
+2. **Authentication & Authorization**
+   - Enforce role-based access control (RBAC) where applicable.
+   - Validate authentication tokens on every request.
+   - Avoid relying solely on client-side checks.
+
+3. **Input Validation**
+   - Sanitize and validate all user inputs.
+   - Use parameterized queries to prevent SQL injection.
+   - Apply output encoding to mitigate XSS risks.
+
+4. **Dependency Management**
+   - Use only approved dependencies.
+   - Run security audits (`npm audit`, `yarn audit`, or equivalent) before merging.
+   - Patch or replace vulnerable packages immediately.
+
+5. **Logging & Monitoring**
+   - Log security-relevant events (login attempts, permission changes, data exports).
+   - Monitor for suspicious patterns and alert the security contact.
+
+6. **Secrets & Keys**
+   - Rotate secrets and keys regularly.
+   - Revoke and replace compromised credentials immediately.
+   - Store no secrets in Git history.
+
+7. **Code Review**
+   - Every PR must be reviewed with a security focus.
+   - Check for possible data leaks, insecure algorithms, or misconfigurations.
+
+8. **Incident Response**
+   - Report suspected breaches to the security owner within 1 hour.
+   - Follow the incident response plan documented in `/docs/SECURITY_INCIDENT.md`.

@@ -1,0 +1,6 @@
+# Require CPO review for critical governance assets
+.cursor/**       @your-org/cpo
+docs/DECISIONS/** @your-org/cpo
+docs/AGENTS/**    @your-org/cpo
+
+

@@ -1,0 +1,31 @@
+---
+description: >
+  standards for error handling and logging across all codebases.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Error Handling & Logging Standards
+
+1. **Error Types**
+   - Use structured error objects (code, message, context).
+   - Avoid throwing raw strings.
+   - Categorize errors: validation, network, internal, external.
+
+2. **Handling**
+   - Fail fast where safe; degrade gracefully where required.
+   - Always handle known failure points (I/O, API calls, parsing).
+   - Provide user-facing messages only for actionable errors.
+
+3. **Logging**
+   - Log at appropriate levels: `error`, `warn`, `info`, `debug`.
+   - Never log sensitive data (PII, credentials, tokens).
+   - Use structured logging format (JSON preferred) for machine parsing.
+
+4. **Monitoring**
+   - All errors must be visible in monitoring tools.
+   - Critical errors must trigger alerts within agreed SLAs.
+
+5. **Testing**
+   - Include error-path unit tests for all critical functions.

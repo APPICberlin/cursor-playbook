@@ -1,0 +1,49 @@
+---
+description: >
+  Performance Standards — required practices to ensure efficient, scalable, and maintainable systems.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Performance Standards — Required Practices
+
+1. **Code Efficiency**
+   - Avoid unnecessary computations in hot paths.
+   - Prefer O(1) or O(log n) algorithms for frequent operations.
+   - Minimize synchronous blocking in async flows.
+
+2. **Database Performance**
+   - Use indexes for frequently queried fields.
+   - Avoid N+1 query patterns.
+   - Batch operations when possible.
+
+3. **Caching**
+   - Use in-memory caches for repeated expensive computations.
+   - Invalidate caches correctly to avoid stale data issues.
+   - Apply appropriate TTLs for cache entries.
+
+4. **API & Network**
+   - Minimize payload sizes (use compression, remove unused fields).
+   - Use pagination for large data sets.
+   - Optimize query parameters and endpoints to reduce latency.
+
+5. **Testing Performance**
+   - Include performance-sensitive scenarios in test suites.
+   - Establish and monitor baseline metrics (response time, throughput, memory usage).
+   - Fail builds if performance regressions exceed agreed thresholds.
+
+6. **Scalability**
+   - Design systems to handle at least 2x expected peak load.
+   - Use horizontal scaling where applicable.
+   - Keep critical paths stateless unless unavoidable.
+
+7. **Monitoring**
+   - Track performance metrics via APM tools or logs.
+   - Alert on degradation beyond SLA targets.
+   - Regularly review logs for anomalies.
+
+8. **Review & Optimization**
+   - Profile code before optimization; avoid premature optimization.
+   - Document any trade-offs made for performance reasons.
+   - Revisit performance assumptions quarterly.

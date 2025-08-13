@@ -1,0 +1,17 @@
+---
+description: Enforce strict top-down ticket execution with stop conditions.
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# 100-02 — Batch Execution (Sequenced)
+
+1) Execute tickets in batches as listed in `docs/TICKETS_P0.md`.
+   - Within a batch, parallelize only independent tickets; otherwise follow listed order.
+   - Prefer PR-trains: bundle 2–3 related tickets from the SAME batch into one PR (commit-per-ticket). Keep diffs small (<400 LOC when possible). Convert from Draft to Ready only when ALL tickets in the train pass QA.
+   - WIP limit: Max 2 tickets In Progress per batch at any time. Others stay queued.
+   - Multi-agent WIP coordination: When starting a ticket, immediately open a DRAFT PR and annotate the ticket line in `docs/TICKETS_P0.md` with `(WIP — <branch> / PR #<n>)`. Do not start any ticket already annotated or with an open PR.
+2) After each ticket/PR merges, rebase/merge the batch branch; do not start next batch until all items in the current batch are merged or explicitly deferred.
+3) Stop after **2 red CI/test runs** on the same ticket; open PR with findings; wait for ✅.
+4) No scope beyond each ticket’s AC. If dependencies discovered, update the ticket and move it to next batch.
+5) Update docs only if AC/DoD requires it. Author tickets using the scaffold in `docs/TICKETS.md`.
