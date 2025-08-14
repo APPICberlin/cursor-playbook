@@ -40,6 +40,12 @@ Screenshots policy:
 - Ask the PO to run in “Zero Actions” mode for this repo.
 - Disable Actions in GitHub: Settings → Actions → Disable. Local `prepush` becomes the gate.
 
+CI workflows you can enable later (menu):
+- Ready-only Smoke (`ci.yml`)
+- PR Guardian (`pr-guardian.yml`)
+- Auto Draft PR (`open-draft-pr.yml`)
+- Preview & Screenshots (`screenshots.yml`)
+
 ## 5) Integration branch (one command, local)
 
 Create a single PR that merges several feature branches (“trains”) with conflict policy baked in.

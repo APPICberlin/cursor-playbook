@@ -19,6 +19,20 @@ Use this for backend-only or full-stack repos. Skip frontend-only items if not a
   - PO flips Draft → Ready only after the author pastes evidence (screenshots named `TICKETID-*`) and confirms smoke is green locally.
   - Guardian checks are performed by `scripts/screenshot-hygiene.mjs` locally; CI guardian is skipped.
 
+## CI workflows menu (pick only what you need)
+
+Default is local-only; all below can be disabled to save minutes. During onboarding, the PO should choose which to enable:
+
+- Ready-only Smoke (`.github/workflows/ci.yml`) — fast Playwright smoke on Ready PRs.
+- PR Guardian (`.github/workflows/pr-guardian.yml`) — metadata + screenshot hygiene; fails integration PRs missing required sections.
+- Auto Draft PR (`.github/workflows/open-draft-pr.yml`) — opens Draft PRs on pushes to `feat/**` or `fix/**`.
+- Preview & Screenshots (`.github/workflows/screenshots.yml`) — optional visual artifact job; keep disabled unless needed.
+
+During the onboarding interview, confirm:
+- Are CI minutes constrained? If yes, keep Zero Actions and rely on `npm run prepush`.
+- If FE app: enable Guardian; optionally enable Smoke on Ready.
+- If BE-only: disable screenshots workflow; Guardian still useful.
+
 ## Standardization
 - Project flavor is declared in `project.flavor.json` (`framework`, `language`).
 - Follow `docs/ARCHITECTURE.md` for folder layout. Mixing frameworks (e.g., Next + Redwood) is blocked by the structure guardian.
