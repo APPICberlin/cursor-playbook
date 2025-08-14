@@ -1,10 +1,10 @@
 # Cursor Playbook Template
 
-This folder contains a portable setup to orchestrate 2–4 Cursor agents with a CPO orchestrator, enforce ticket discipline, and gate delivery via CI. Copy its contents to the root of a new project and tailor via the included guide.
+This folder contains a portable setup to orchestrate Product Owner (PO) and Developer Agents (DevA), enforce ticket discipline, and gate delivery locally-first (CI optional). Copy its contents to the root of a new project and tailor via the included guide.
 
 Contents:
 - `.cursor/rules/` — Agent rules (global, workflow, batch execution)
-- `docs/AGENTS/` — Prompts for CPO, Background Agent, and Repo Agent
+- `docs/AGENTS/` — Prompts for Product Owner and Developer Agent
 - `.github/workflows/` — `ci.yml` (Ready-only smoke) and `pr-guardian.yml` (metadata + screenshot hygiene)
 - `.github/PULL_REQUEST_TEMPLATE.md` — Standard PR checklist
 - `CODEOWNERS` — Require CPO approval on sensitive paths
@@ -21,15 +21,16 @@ Quick start (for a fresh repo):
    - `<PROJECT_NAME>` → your project
    - `_SERVICE_NAME`/`_REGION` in `cloudbuild.yaml`
    - CODEOWNERS GitHub handles
-3) Choose CI mode:
+3) Choose CI mode (Onboarding interview):
    - Default: keep Actions enabled and run Ready-only smoke (`ci`) plus guardian.
    - Zero Actions: disable GitHub Actions entirely to spend 0 minutes. In this mode, the Product Owner (PO) must explicitly request “Zero Actions” and enforce local gates only. Agents must run `npm run prepush` (lint → typecheck → build → smoke) before pushing; PRs are flipped Ready only after local smoke passes and screenshots are embedded.
+   - During onboarding, PO selects which workflows to enable (Guardian, Smoke, Draft PRs, Screenshots) or none.
 4) If CI is enabled, push a test PR to verify guardrails. The smoke job should run and pass.
 
 Standardization policy
 - Declare `project.flavor.json` with `framework` (`nextjs`|`redwood`|`node`) and `language` (`ts`).
 - Use the conventional directories from `docs/ARCHITECTURE.md` for your flavor.
 - Archive obsolete code into `ARCHIVE/` and never import from it; see `docs/ARCHIVE_POLICY.md`.
-- `prepush` runs a structure and screenshot hygiene guardian before smoke tests.
+- `prepush` runs structure + screenshot hygiene + smoke + optional visual layout checks.
 
 Tailoring guide is in `CURSOR_PLAYBOOK_GUIDE.md`.

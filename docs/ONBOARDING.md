@@ -3,8 +3,8 @@
 Use this for backend-only or full-stack repos. Skip frontend-only items if not applicable.
 
 ## Roles
-- Product Owner (PO): orchestrates tickets, priorities, and flips PRs to Ready.
-- Background Agents: implement tickets; run local QA before pushing.
+- Product Owner (PO): orchestrates tickets, runs onboarding interview, picks CI mode, and flips PRs to Ready. Owns end-to-end quality and speed.
+- Developer Agents (DevA): implement tickets; must pass local QA (prepush + visual) before pushing.
 
 ## Local-first QA (zero/minimal CI)
 - Run `npm run prepush` before every push:
@@ -32,6 +32,14 @@ During the onboarding interview, confirm:
 - Are CI minutes constrained? If yes, keep Zero Actions and rely on `npm run prepush`.
 - If FE app: enable Guardian; optionally enable Smoke on Ready.
 - If BE-only: disable screenshots workflow; Guardian still useful.
+
+### Onboarding interview script (PO)
+- Project flavor and language: set `project.flavor.json` (nextjs/redwood/node, ts).
+- Directory structure: confirm it matches `docs/ARCHITECTURE.md`; archive strays.
+- CI mode: Zero Actions now? If not, which workflows to enable (Guardian, Smoke, Draft PRs, Screenshots)?
+- Visual QA: confirm `npm run prepush` runs visual checks; define brand alt text and KPI selectors if needed (env vars `VISUAL_BRAND_ALT`, `VISUAL_KPI_COUNT`).
+- Tickets: create `docs/TICKETS_P0.md` and first tickets; adopt PR template.
+- Protection: set branch protection and CODEOWNERS for `docs/**` and `.cursor/**`.
 
 ## Standardization
 - Project flavor is declared in `project.flavor.json` (`framework`, `language`).
