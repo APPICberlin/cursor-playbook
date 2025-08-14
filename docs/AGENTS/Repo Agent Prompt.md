@@ -19,7 +19,7 @@ Implementation
 - Use the PR template `.github/PULL_REQUEST_TEMPLATE.md`.
 
 QA Loop (must pass locally before any PR)
-- Run and fix until green: npm run lint, typecheck, build, test, e2e (if applicable).
+- Run and fix until green: `npm run prepush` (structure + screenshot hygiene → lint → typecheck → build → smoke → optional local preview + visual layout checks).
 - No console errors in the app.
 - Manually verify every AC in the ticket.
 - On any failure, fix and rerun the full loop. Do not open a PR until everything is green.

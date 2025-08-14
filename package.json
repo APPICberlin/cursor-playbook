@@ -9,7 +9,7 @@
     "test": "npm run unit && npm run smoke",
     "unit": "vitest run --silent --reporter=dot",
     "smoke": "playwright test tests/e2e/smoke.spec.ts --project=chromium",
-    "prepush": "node scripts/structure-guardian.mjs && node scripts/screenshot-hygiene.mjs && npm run lint && npm run typecheck && npm run build && npm run smoke",
+    "prepush": "bash scripts/prepush.sh",
     "integrate": "node scripts/integrate.mjs --base=main --slug=$SLUG --branches=$BRANCHES"
   },
   "devDependencies": {
