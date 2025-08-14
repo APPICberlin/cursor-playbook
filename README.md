@@ -13,6 +13,7 @@ Contents:
 - `CURSOR_PLAYBOOK_GUIDE.md` — How to tailor and roll out
 - `docs/ARCHITECTURE.md` — Standard structures and language policy
 - `docs/ARCHIVE_POLICY.md` — How to archive obsolete files safely
+ - `docs/USER_GUIDE.md` — Copy/paste commands and AI prompt snippets for founders/POs
 
 Quick start (for a fresh repo):
 1) Copy everything in `templates/cursor-playbook/*` to your repo root, preserving file paths (folders starting with a dot must be kept).
