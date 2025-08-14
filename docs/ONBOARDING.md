@@ -19,6 +19,11 @@ Use this for backend-only or full-stack repos. Skip frontend-only items if not a
   - PO flips Draft → Ready only after the author pastes evidence (screenshots named `TICKETID-*`) and confirms smoke is green locally.
   - Guardian checks are performed by `scripts/screenshot-hygiene.mjs` locally; CI guardian is skipped.
 
+## Standardization
+- Project flavor is declared in `project.flavor.json` (`framework`, `language`).
+- Follow `docs/ARCHITECTURE.md` for folder layout. Mixing frameworks (e.g., Next + Redwood) is blocked by the structure guardian.
+- Obsolete files are moved to `ARCHIVE/` and never imported; see `docs/ARCHIVE_POLICY.md`.
+
 ## Repo bootstrap (PO)
 - Copy from template:
   - `.cursor/rules/`
