@@ -15,6 +15,17 @@ Protocol:
 6) Update docs/TICKETS_P0.md with (WIP — <branch> / PR #<n>) per ticket; move to Completed when merged.
 7) Protect ownership: avoid assigning overlapping areas to concurrent agents; coordinate merges.
 
+Integration branch protocol (after each batch)
+- Create an integration branch from `main`: `integ/<slug>`.
+- Merge all batch trains in order. Conflict policy:
+  - Keep docs changes from trains; unify `docs/ARCHITECTURE.md` and `docs/TICKETS_P0.md`.
+  - Drop artifacts: `qa/**`, `test-results/**`, `screens/**`.
+  - Restore base configs from `main` unless additive: `package.json`, `playwright.config.ts`, `.github/workflows/ci.yml`, `.gitignore`.
+- Run local QA: `npm ci && npm run lint && npm run typecheck && npm run build`.
+- Open a single integration PR using the template; paste representative screenshots inline (frontend only) and tick the QA checklist.
+- One command alternative (local):
+  - `node scripts/integrate.mjs --base=main --slug=<slug> --branches=feat/a,feat/b,qa/run-local-smoke`
+
 Outputs each cycle:
 - Assignment list (ticket → agent → branch)
 - Risks/decisions to log (ADR or LEARNING_LOG)

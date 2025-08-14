@@ -55,6 +55,17 @@ jobs:
               }
             }
 
+            // Additional guard for integration PRs: require sections in body
+            const isIntegration = /^(Integration:|integ\//i.test(title) || /integ\//.test(pr.head.ref));
+            if (isIntegration) {
+              const required = [/##\s*Acceptance Criteria/i, /##\s*Screenshots\s*\(inline\)/i, /##\s*QA Checklist/i];
+              for (const r of required) {
+                if (!r.test(body)) {
+                  core.setFailed('Integration PR must include Acceptance Criteria, Screenshots (inline), and QA Checklist sections.');
+                  break;
+                }
+              }
+            }
             core.info('PR guardian checks passed.');
 
 name: pr-guardian
