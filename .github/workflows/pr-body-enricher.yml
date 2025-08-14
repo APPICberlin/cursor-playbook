@@ -1,0 +1,67 @@
+name: pr-body-enricher
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enrich PR body with linked tickets and labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const title = pr.title || '';
+            const body  = pr.body || '';
+            const branch = pr.head.ref || '';
+
+            // Extract ticket-like IDs from title/body/branch/commits
+            const idRegex = /\b([A-Z]{1,6}-\d{1,5}|E\d{1,3}-\d{1,3})\b/g;
+            const pool = [title, body, branch].join('\n');
+            const ids = new Set([...(pool.match(idRegex) || [])]);
+
+            // Pull changed files and commit messages to find more IDs
+            const files = await github.paginate(github.rest.pulls.listFiles, { ...context.repo, pull_number: pr.number });
+            for (const f of files) {
+              const msgIds = (f.patch || '').match(idRegex) || [];
+              for (const i of msgIds) ids.add(i);
+            }
+
+            // Prepare body sections
+            const lines = (body || '').split(/\r?\n/);
+            const ensureSection = (header, contentLines) => {
+              const idx = lines.findIndex(l => l.trim().toLowerCase() === header.toLowerCase());
+              if (idx === -1) {
+                lines.push('', header, ...contentLines);
+              }
+            };
+
+            const linked = Array.from(ids);
+            ensureSection('### Linked tickets', linked.length ? linked.map(x => `- ${x}`) : ['- (add ticket IDs)']);
+            ensureSection('### Acceptance Criteria', ['- [ ] Paste ACs from the ticket file(s).']);
+            ensureSection('### Screenshots', ['- Paste 2–3 PNGs inline (TICKETID-*.png).']);
+            ensureSection('### ADR touched?', ['- [ ] No', '- [ ] Yes — list ADRs updated']);
+
+            const newBody = lines.join('\n');
+            if (newBody !== body) {
+              await github.rest.pulls.update({ ...context.repo, pull_number: pr.number, body: newBody });
+            }
+
+            // EPIC label from first token prefix (before '-')
+            if (linked.length) {
+              const head = linked[0];
+              const epic = head.split('-')[0];
+              try {
+                await github.rest.issues.addLabels({ ...context.repo, issue_number: pr.number, labels: [`EPIC:${epic}`] });
+              } catch (e) {
+                core.info(`Label add failed or already exists: ${e.message}`);
+              }
+            }
+            core.info('PR body enrichment completed');
+

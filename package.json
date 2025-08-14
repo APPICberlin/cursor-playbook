@@ -10,7 +10,8 @@
     "unit": "vitest run --silent --reporter=dot",
     "smoke": "playwright test tests/e2e/smoke.spec.ts --project=chromium",
     "prepush": "bash scripts/prepush.sh",
-    "integrate": "node scripts/integrate.mjs --base=main --slug=$SLUG --branches=$BRANCHES"
+    "integrate": "node scripts/integrate.mjs --base=main --slug=$SLUG --branches=$BRANCHES",
+    "agent:log": "node scripts/log-session.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.46.0",
