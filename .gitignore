@@ -5,3 +5,4 @@ screens/debug-*
 .DS_Store
 
 
+qa/**
